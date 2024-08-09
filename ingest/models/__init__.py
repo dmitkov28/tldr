@@ -11,3 +11,9 @@ class HackerNewsStory(BaseModel):
 class LobstersNewsStory(BaseModel):
     title: Optional[str]
     url: Optional[str]
+
+
+class SlashdotNewsStory(BaseModel):
+    title: Optional[str]
+    url: Optional[str]
+    text: Optional[str]
