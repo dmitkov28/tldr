@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+httpx = "*"
+fastapi = {extras = ["standard"], version = "*"}
+pydantic = "*"
+w3lib = "*"
+beautifulsoup4 = "*"
+openai = "*"
+python-dotenv = "*"
+
+[dev-packages]
+ruff = "*"
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.1"
