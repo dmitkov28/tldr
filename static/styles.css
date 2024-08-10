@@ -1,0 +1,88 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+
+}
+
+h1 {
+    padding: 1em;
+}
+
+.flex {
+    display: flex;
+    flex-grow: 1;
+    padding: 0 1em 1em;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 1em;
+    overflow: hidden;
+}
+
+.links,
+.analysis {
+    flex-grow: 1;
+    border: 1px solid #C0C2C9;
+    border-radius: 4px;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    width: 50%;
+}
+
+h2,
+h3,
+h4 {
+    margin: 1em 0;
+}
+
+p {
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.story {
+    line-height: 1.5;
+    margin: 1em 0;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    text-align: center;
+    padding: 0.5em;
+}
+
+.gh-logo {
+    height: 1.75em;
+}
+
+@media only screen and (max-width: 600px) {
+    .flex {
+        flex-direction: column;
+        padding: 0 0.5em 0.5em;
+    }
+
+    .links,
+    .analysis {
+        width: 100%;
+        margin-top: 1em;
+        max-height: 40vh;
+    }
+}
