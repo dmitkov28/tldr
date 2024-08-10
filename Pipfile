@@ -11,6 +11,8 @@ w3lib = "*"
 beautifulsoup4 = "*"
 openai = "*"
 python-dotenv = "*"
+lxml = "*"
+jinja2 = "*"
 
 [dev-packages]
 ruff = "*"
