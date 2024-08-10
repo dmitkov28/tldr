@@ -17,3 +17,9 @@ class SlashdotNewsStory(BaseModel):
     title: Optional[str]
     url: Optional[str]
     text: Optional[str]
+
+
+class GithubRepo(BaseModel):
+    title: Optional[str]
+    url: Optional[str]
+    text: Optional[str]

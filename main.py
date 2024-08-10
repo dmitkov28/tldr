@@ -56,11 +56,18 @@ def get_slashdot():
     return {"data": data}
 
 
+@app.get("/gh")
+def get_gh_repos():
+    data = get_trending_github_repos()
+    return {"data": data}
+
+
 @app.get("/ai")
 def get_ai_analysis():
     lobsters_data = [x.model_dump_json() for x in get_lobsters_stories()]
     hn_data = [x.model_dump_json() for x in get_hn_stories()]
     slashdot_data = [x.model_dump_json() for x in get_slashdot_stories()]
-    all_data = hn_data + lobsters_data + slashdot_data
+    gh_repos = [x.model_dump_json() for x in get_trending_github_repos()]
+    all_data = hn_data + lobsters_data + slashdot_data + gh_repos
     ai_analysis = get_openai_analysis(json.dumps(all_data))
     return HTMLResponse(ai_analysis)

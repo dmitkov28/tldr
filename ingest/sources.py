@@ -1,7 +1,13 @@
-from typing import List
+from typing import List, Literal
+from urllib.parse import urlencode
 
 import httpx
-from ingest.models import HackerNewsStory, LobstersNewsStory, SlashdotNewsStory
+from ingest.models import (
+    GithubRepo,
+    HackerNewsStory,
+    LobstersNewsStory,
+    SlashdotNewsStory,
+)
 from ingest.utils import get
 from w3lib.html import remove_tags
 from bs4 import BeautifulSoup
@@ -62,6 +68,36 @@ def get_slashdot_stories() -> List[SlashdotNewsStory]:
             url=item.find("link").text,
         )
         for item in soup.find_all("item")
+    ]
+
+    return items
+
+
+def get_trending_github_repos(
+    spoken_language: str = "en",
+    time_range: Literal["daily", "weekly", "monthly"] = "daily",
+    language: str = None,
+) -> List[GithubRepo]:
+    base_url = "https://github.com/trending/"
+
+    if language:
+        base_url += language
+
+    params = {
+        "spoken_language_code": spoken_language.lower(),
+        "since": time_range,
+    }
+    url = base_url + "?" + urlencode(params)
+    res = httpx.get(url).text
+    soup = BeautifulSoup(res, "html.parser")
+    repos = soup.find_all("article")
+    items = [
+        GithubRepo(
+            title="".join(item.find("a", class_="Link").text.split()),
+            text=item.find("p", class_="col-9").text.strip(),
+            url=f"https://github.com/{"".join(item.find("a", class_="Link").text.split())}",
+        )
+        for item in repos
     ]
 
     return items
