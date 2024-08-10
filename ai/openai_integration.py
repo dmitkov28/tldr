@@ -13,6 +13,7 @@ def get_openai_analysis(input_data: str):
                 You will receive tech news, github repositories, assess the data you're given
                 and provide useful summaries and insights into emerging trends around software.
                 Focus on the following topics: web development, cloud infrastructure, AI, LLMs, Python, JS Frameworks, data science.
+                ALWAYS INCLUDE A LINK TO YOUR SOURCE
                 Format your analysis as HTML. Use headings and paragraphs.
                 """,
             },
