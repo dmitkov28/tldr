@@ -108,3 +108,9 @@ def get_ai_analysis():
         system_prompt=prompts.news_summarizer, prompt=json.dumps(all_data)
     )
     return HTMLResponse(ai_analysis)
+
+
+@app.get("/reddit/{subreddit}")
+def get_reddit_posts(subreddit: str):
+    data = sources.get_reddit_posts(subreddit)
+    return {"data": data}
