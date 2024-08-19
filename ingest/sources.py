@@ -4,17 +4,13 @@ from urllib.parse import urlencode
 
 import httpx
 from bs4 import BeautifulSoup
+from googleapiclient.discovery import build
 from w3lib.html import remove_tags
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from ingest.models import (
-    GithubRepo,
-    HackerNewsStory,
-    LobstersNewsStory,
-    SlashdotNewsStory,
-)
+from ingest.models import (GithubRepo, HackerNewsStory, LobstersNewsStory,
+                           SlashdotNewsStory)
 from ingest.utils import get
-from googleapiclient.discovery import build
 
 
 def get_hn_story(story_id: int) -> HackerNewsStory:
@@ -156,3 +152,22 @@ def get_yt_comments(video_id: str):
     # Get and print comments
     video_comments = get_comments(youtube, video_id)
     return video_comments
+
+
+def get_reddit_posts(subreddit: str = None) -> List:
+    if subreddit:
+        url = f"https://www.reddit.com/r/{subreddit}.json"
+    else:
+        url = "https://www.reddit.com/r/popular.json"
+        
+    res = httpx.get(url)
+    if res.status_code == 200:
+        posts = res.json().get("data").get("children")
+        data = [{
+            "title": post.get("data", {}).get("title"),
+            "link": post.get("data", {}).get("url_overridden_by_dest"),
+            "text": post.get("data", {}).get("selftext")
+            }
+                for post in posts]
+        return data
+    return []
