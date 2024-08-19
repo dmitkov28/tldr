@@ -1,3 +1,4 @@
+import os
 from typing import List, Literal
 from urllib.parse import urlencode
 
@@ -9,6 +10,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from ingest.models import (GithubRepo, HackerNewsStory, LobstersNewsStory,
                            SlashdotNewsStory)
 from ingest.utils import get
+from googleapiclient.discovery import build
 
 
 def get_hn_story(story_id: int) -> HackerNewsStory:
@@ -100,7 +102,53 @@ def get_trending_github_repos(
 
     return items
 
+
 def get_yt_video_transcript(video_id: str):
-    transcript =  YouTubeTranscriptApi.get_transcript(video_id)
+    transcript = YouTubeTranscriptApi.get_transcript(video_id)
     text = " ".join(item.get("text").strip().replace("\n", " ") for item in transcript)
     return text
+
+
+def get_yt_comments(video_id: str):
+    # Replace with your own API key
+    api_key = os.getenv("YOUTUBE_API_KEY")
+
+    # Create a YouTube API client
+    youtube = build("youtube", "v3", developerKey=api_key)
+
+    # Retrieve comments
+    def get_comments(youtube, video_id):
+        comments = []
+        results = (
+            youtube.commentThreads()
+            .list(
+                part="snippet", videoId=video_id, textFormat="plainText", maxResults=100
+            )
+            .execute()
+        )
+
+        while results:
+            for item in results["items"]:
+                comment = item["snippet"]["topLevelComment"]["snippet"]["textDisplay"]
+                comments.append(comment)
+
+            if "nextPageToken" in results:
+                results = (
+                    youtube.commentThreads()
+                    .list(
+                        part="snippet",
+                        videoId=video_id,
+                        textFormat="plainText",
+                        maxResults=100,
+                        pageToken=results["nextPageToken"],
+                    )
+                    .execute()
+                )
+            else:
+                break
+
+        return comments
+
+    # Get and print comments
+    video_comments = get_comments(youtube, video_id)
+    return video_comments
