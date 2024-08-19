@@ -19,8 +19,8 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 def get_design(request: Request):
-    hn_data = sources.sources.get_hn_stories()
-    lobsters_data = sources.sources.get_lobsters_stories()
+    hn_data = sources.get_hn_stories()
+    lobsters_data = sources.get_lobsters_stories()
     slashdot_data = sources.get_slashdot_stories()
     gh_repos = sources.get_trending_github_repos()
     all_data = hn_data + lobsters_data + slashdot_data + gh_repos
