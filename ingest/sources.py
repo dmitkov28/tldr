@@ -7,8 +7,12 @@ from bs4 import BeautifulSoup
 from w3lib.html import remove_tags
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from ingest.models import (GithubRepo, HackerNewsStory, LobstersNewsStory,
-                           SlashdotNewsStory)
+from ingest.models import (
+    GithubRepo,
+    HackerNewsStory,
+    LobstersNewsStory,
+    SlashdotNewsStory,
+)
 from ingest.utils import get
 from googleapiclient.discovery import build
 
