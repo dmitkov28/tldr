@@ -21,3 +21,23 @@ def get_openai_analysis(input_data: str):
         ],
     )
     return completion.choices[0].message.content
+
+
+def get_openai_yt_summary(input_data: str):
+    openai_client = OpenAI()
+    completion = openai_client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": "system",
+                "content": """
+                You're a helpful assistant specializing in insights extraction. You will receive a transcript of a YouTube Video.
+                Analyze the script and summarize the key points, insights, interesting tidbits, and other information might be helpful.
+                Structure your output using different sections.
+                Format your analysis as HTML. Use headings and paragraphs.
+                """,
+            },
+            {"role": "user", "content": input_data},
+        ],
+    )
+    return completion.choices[0].message.content
