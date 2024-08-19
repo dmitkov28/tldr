@@ -6,14 +6,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from ai.openai_integration import get_openai_analysis
-from ingest.sources import (
-    get_hn_stories,
-    get_lobsters_stories,
-    get_slashdot_stories,
-    get_trending_github_repos,
-    get_yt_video_transcript,
-)
+from ai.openai_integration import get_openai_analysis, get_openai_yt_summary
+from ingest.sources import (get_hn_stories, get_lobsters_stories,
+                            get_slashdot_stories, get_trending_github_repos,
+                            get_yt_video_transcript)
 
 load_dotenv()
 
@@ -67,6 +63,13 @@ def get_gh_repos():
 def get_yt_transcript(video_id: str):
     data = get_yt_video_transcript(video_id)
     return {"data": data}
+
+
+@app.get("/yt-ai/{video_id}")
+def get_yt_transcript_ai_analysis(video_id: str):
+    data = get_yt_video_transcript(video_id)
+    ai_analysis = get_openai_yt_summary(json.dumps(data))
+    return HTMLResponse(ai_analysis)
 
 
 @app.get("/ai")
