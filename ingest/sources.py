@@ -2,15 +2,13 @@ from typing import List, Literal
 from urllib.parse import urlencode
 
 import httpx
-from ingest.models import (
-    GithubRepo,
-    HackerNewsStory,
-    LobstersNewsStory,
-    SlashdotNewsStory,
-)
-from ingest.utils import get
-from w3lib.html import remove_tags
 from bs4 import BeautifulSoup
+from w3lib.html import remove_tags
+from youtube_transcript_api import YouTubeTranscriptApi
+
+from ingest.models import (GithubRepo, HackerNewsStory, LobstersNewsStory,
+                           SlashdotNewsStory)
+from ingest.utils import get
 
 
 def get_hn_story(story_id: int) -> HackerNewsStory:
@@ -101,3 +99,8 @@ def get_trending_github_repos(
     ]
 
     return items
+
+def get_yt_video_transcript(video_id: str):
+    transcript =  YouTubeTranscriptApi.get_transcript(video_id)
+    text = " ".join(item.get("text").strip().replace("\n", " ") for item in transcript)
+    return text

@@ -13,6 +13,7 @@ openai = "*"
 python-dotenv = "*"
 lxml = "*"
 jinja2 = "*"
+youtube-transcript-api = "*"
 
 [dev-packages]
 ruff = "*"
