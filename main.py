@@ -12,6 +12,7 @@ from ingest.sources import (
     get_lobsters_stories,
     get_slashdot_stories,
     get_trending_github_repos,
+    get_yt_video_transcript,
 )
 
 load_dotenv()
@@ -59,6 +60,12 @@ def get_slashdot():
 @app.get("/gh")
 def get_gh_repos():
     data = get_trending_github_repos()
+    return {"data": data}
+
+
+@app.get("/yt/{video_id}")
+def get_yt_transcript(video_id: str):
+    data = get_yt_video_transcript(video_id)
     return {"data": data}
 
 
