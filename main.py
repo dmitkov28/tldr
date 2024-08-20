@@ -6,9 +6,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from youtube_transcript_api._errors import TranscriptsDisabled
+
 from ai import prompts
 from ai.openai_integration import analyze_with_openai
 from ingest import sources
+from ingest.tiktok import get_tiktok_comments
 
 load_dotenv()
 
@@ -113,4 +115,15 @@ def get_ai_analysis():
 @app.get("/reddit/{subreddit}")
 def get_reddit_posts(subreddit: str):
     data = sources.get_reddit_posts(subreddit)
+    return {"data": data}
+
+
+
+
+@app.get("/tiktok-comments/{user_id}/{video_id}")
+async def get_tiktok_comments_data(user_id, video_id: str):
+    data = get_tiktok_comments(video_id)
+    # ai_analysis = analyze_with_openai(
+    #     system_prompt=prompts.tiktok_comments_analyst, prompt=json.dumps(data)
+    # )
     return {"data": data}
