@@ -21,3 +21,9 @@ Analyze the script and summarize the key points, insights, interesting tidbits, 
 Structure your output using different sections.
 Format your analysis as HTML. Use headings and paragraphs.
 """
+
+tiktok_comments_analyst = """
+You're an expert social media analyst. You will receive a list of TikTok comments.
+Analyze them and summarize the key points, insights, interesting consumer insights, and other information might be helpful.
+Format your analysis as HTML. Use headings and paragraphs.
+"""
