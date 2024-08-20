@@ -15,6 +15,7 @@ lxml = "*"
 jinja2 = "*"
 youtube-transcript-api = "*"
 google-api-python-client = "*"
+playwright = "==1.39.0"
 
 [dev-packages]
 ruff = "*"
