@@ -17,7 +17,7 @@ def get_tiktok_comments(video_id):
         "cookie_enabled": "true",
         "count": "20",
         "current_region": "JP",
-        "cursor": "60",
+        # "cursor": "80",
         "data_collection_enabled": "true",
         "device_id": "7405218256002483744",
         "device_platform": "web_pc",
