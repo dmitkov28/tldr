@@ -8,8 +8,12 @@ from googleapiclient.discovery import build
 from w3lib.html import remove_tags
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from ingest.models import (GithubRepo, HackerNewsStory, LobstersNewsStory,
-                           SlashdotNewsStory)
+from ingest.models import (
+    GithubRepo,
+    HackerNewsStory,
+    LobstersNewsStory,
+    SlashdotNewsStory,
+)
 from ingest.utils import get
 
 
@@ -159,15 +163,17 @@ def get_reddit_posts(subreddit: str = None) -> List:
         url = f"https://www.reddit.com/r/{subreddit}.json"
     else:
         url = "https://www.reddit.com/r/popular.json"
-        
+
     res = httpx.get(url)
     if res.status_code == 200:
         posts = res.json().get("data").get("children")
-        data = [{
-            "title": post.get("data", {}).get("title"),
-            "link": post.get("data", {}).get("url_overridden_by_dest"),
-            "text": post.get("data", {}).get("selftext")
+        data = [
+            {
+                "title": post.get("data", {}).get("title"),
+                "link": post.get("data", {}).get("url_overridden_by_dest"),
+                "text": post.get("data", {}).get("selftext"),
             }
-                for post in posts]
+            for post in posts
+        ]
         return data
     return []
