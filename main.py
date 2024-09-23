@@ -11,6 +11,7 @@ from ai import prompts
 from ai.openai_integration import analyze_with_openai
 from ingest import sources
 from ingest.tiktok import get_tiktok_comments
+from ingest.utils import get_youtube_video_id_from_url
 
 load_dotenv()
 
@@ -19,7 +20,27 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/")
+@app.get("/youtube")
+def homepage(request: Request, video_url: str | None = None):
+    if video_url:
+        video_id = get_youtube_video_id_from_url(video_url)
+        try:
+            data = sources.get_yt_video_transcript(video_id)
+        except TranscriptsDisabled:
+            return {"Error": "Could not retrieve YouTube transcript"}
+
+        comments = " ".join(item for item in sources.get_yt_comments(video_id))
+        all_data = data + "\n" + "Comments:" + " " + comments
+        ai_analysis = analyze_with_openai(
+            system_prompt=prompts.yt_transcripts_and_comments_summarizer,
+            prompt=json.dumps(all_data),
+        )
+        return HTMLResponse(ai_analysis)
+
+    return templates.TemplateResponse(request=request, name="youtube.html")
+
+
+@app.get("/analysis")
 def get_design(request: Request):
     hn_data = sources.get_hn_stories()
     lobsters_data = sources.get_lobsters_stories()
@@ -116,8 +137,6 @@ def get_ai_analysis():
 def get_reddit_posts(subreddit: str):
     data = sources.get_reddit_posts(subreddit)
     return {"data": data}
-
-
 
 
 @app.get("/tiktok-comments/{user_id}/{video_id}")
